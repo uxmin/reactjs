@@ -1,33 +1,20 @@
 import './css/App.css';
 import React from 'react';
-// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-// import SignUp from './routes/signup';
+
 import PostMain from './page/post/PostMain';
 import PostView from './page/post/PostView';
-import { BrowserRouter, Route } from 'react-router-dom';
+import PostWrite from './page/post/PostWrite';
 
-// class App extends React.Component {
-//   render(){
-//     return (
-//       <div className="App">
-//         <Router>
-//           <Link to='/signup'>Sign Up</Link>
-//           <Route path='/signup' component={SignUp}/>
-//         </Router>
-//         <PostMain />
-//       </div>
-//     );
-//   }
-// }
+import { BrowserRouter, Route } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Route exact path='/postView/:id' component={PostView} />
         <Route exact path='/' component={PostMain} />
+        <Route exact path='/post/view/:_id' component={PostView} />
+        <Route exact path='/post/write' component={PostWrite} />
       </BrowserRouter>
-      {/* <PostMain /> */}
     </div>
   )
 }

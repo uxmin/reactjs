@@ -7,14 +7,16 @@ const bodyParser = require('body-parser');
 const connect = require('./schemas/index');
 
 const indexRouter = require('./routes/index');
-const userRouter = require('./routes/user');
+const postRouter = require('./routes/post');
 
 connect();
 
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false })); //true: qs module ? query-string module
 app.use(indexRouter);
-app.use('/user', userRouter);
+app.use('/post', postRouter);
 
 app.listen(port, ()=> {
-    console.log(`Server is running on ${port}`);
+  console.log(`Server is running on ${port}`);
 });
