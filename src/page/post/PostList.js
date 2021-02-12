@@ -18,6 +18,7 @@ const PostList = props => {
     const res = await fetch('http://localhost:3001/post');
     const data = await res.json();
     setPosts(data);
+    console.log(posts);
   };
 
   return (
