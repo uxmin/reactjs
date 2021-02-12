@@ -25,7 +25,6 @@ const PostWrite = props => {
       .then(alert('Add Success'))
       .then(history.replace('/'));
   };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setPost({ ...post, [name]: value });
@@ -53,9 +52,9 @@ const PostWrite = props => {
             <textarea className="post-write-textarea" name="content" onChange={handleChange} required />
           </label>
         </div>
-        <button className="post-btn" type="submit">Add Post</button>
+        <button className="post-view-btn" type="submit">Add Post</button>
       </form>
-      <button className="post-btn" onClick={() => history.goBack()}>Go Back</button>
+      <button className="post-btn" onClick={() => history.goBack()}>Back to the List</button>
     </div>
   )
 }

@@ -14,19 +14,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/view/:_id', async (req, res, next) => {
-  try {
-    const selectPost = await Post.find({
-      _id: req.params._id
-    });
-    console.log('selectPost', selectPost);
-    res.json(selectPost);
-  }catch(err) {
-    console.log(err);
-    next(err);
-  }
-});
-
 router.post('/write', async (req, res, next) => {
   try {
     const createPost = await Post.create({
@@ -42,6 +29,19 @@ router.post('/write', async (req, res, next) => {
   }
 });
 
+router.get('/view/:_id', async (req, res, next) => {
+  try {
+    const selectPost = await Post.find({
+      _id: req.params._id
+    });
+    console.log('selectPost', selectPost);
+    res.json(selectPost);
+  }catch(err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 router.get('/delete/:_id', async (req, res, next) => {
   try{
     const deletePost = await Post.remove({
@@ -51,6 +51,22 @@ router.get('/delete/:_id', async (req, res, next) => {
     res.redirect('/');
   }catch(err) {
     console.log(err);
+    next(err);
+  }
+});
+
+router.post('/edit', async (req, res, next) => {
+  try{
+    const editPost = await Post.updateOne({ _id: req.body._id }, {
+      $set: {
+        subject: req.body.subject,
+        content: req.body.content
+      }
+    });
+    console.log('editPost', editPost);
+    res.redirect('/');
+  }catch(err){
+    console.error(err);
     next(err);
   }
 });

@@ -18,15 +18,14 @@ const PostList = props => {
     const res = await fetch('http://localhost:3001/post');
     const data = await res.json();
     setPosts(data);
-    console.log(data);
   };
 
   return (
     <div>
-    <h2 align="center">Post List</h2>
+    <h2 align="center">List</h2>
     <CommonTable headersName={['Id', 'Subject', 'Name', 'Date']}>
       {
-        posts? posts.map((u, index) => (
+        posts ? posts.map((u, index) => (
           <CommonTableRow key={index}>
             <CommonTableColumn>{u._id}</CommonTableColumn>
             <CommonTableColumn>
