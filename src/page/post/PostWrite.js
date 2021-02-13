@@ -22,7 +22,6 @@ const PostWrite = props => {
     };
     console.log(req);
     fetch('http://localhost:3001/post/write', req)
-      .then(alert('Add Success'))
       .then(history.replace('/'));
   };
   const handleChange = (event) => {
@@ -30,31 +29,52 @@ const PostWrite = props => {
     setPost({ ...post, [name]: value });
   };
 
+  const checkAddition = async() => {
+    const msg = window.confirm('Would you like to add a post?');
+    if(msg == true){
+      alert('It has been added successfully!');
+      handleSubmit();
+    }else if(msg == false){
+      alert('Canceled.');
+      return;
+    }
+  }
+  const backToTheList = () => {
+    const msg = window.confirm('Would you like to go back to the list?');
+    if(msg == true){
+      history.goBack();
+    }else if(msg == false){
+      return;
+    }
+  }
+
   return (
     <div>
-      <h2>게시글 등록하기</h2>
-      <form className="post-write-form" onSubmit={handleSubmit}>
-        <div className="post-write-row">
-          <label>Name</label>
-          <label>
-            <input className="post-write-input" type="text" name="username" onChange={handleChange} required />
-          </label>
-        </div>
-        <div className="post-write-row">
-          <label>Subject</label>
-          <label>
-            <input className="post-write-input" type="text" name="subject" onChange={handleChange} required />
-          </label>
-        </div>
-        <div className="post-write-row">
-          <label>Content</label>
-          <label>
-            <textarea className="post-write-textarea" name="content" onChange={handleChange} required />
-          </label>
-        </div>
-        <button className="post-view-btn" type="submit">Add Post</button>
-      </form>
-      <button className="post-btn" onClick={() => history.goBack()}>Back to the List</button>
+      <h2>Write</h2>
+      <div className="post-write-wrapper">
+        <form onSubmit={handleSubmit}>
+          <div className="post-write-row">
+            <label>Name</label>
+            <div>
+              <input className="post-write-input" type="text" name="username" onChange={handleChange} required />
+            </div>
+          </div>
+          <div className="post-write-row">
+            <label>Subject</label>
+            <div>
+              <input className="post-write-input" type="text" name="subject" onChange={handleChange} required />
+            </div>
+          </div>
+          <div className="post-write-row">
+            <label>Content</label>
+            <div>
+              <textarea className="post-write-textarea" name="content" onChange={handleChange} required />
+            </div>
+          </div>
+          <button className="post-small-btn" type="button" onClick={checkAddition}>Add</button>
+          <button className="post-small-btn" type="button" onClick={backToTheList}>List</button>
+        </form>
+      </div>
     </div>
   )
 }

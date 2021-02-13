@@ -24,21 +24,21 @@ const PostList = props => {
   return (
     <div>
     <h2 align="center">List</h2>
-    <CommonTable headersName={['Id', 'Subject', 'Name', 'Date']}>
-      {
-        posts ? posts.map((u, index) => (
-          <CommonTableRow key={index}>
-            <CommonTableColumn>{u._id}</CommonTableColumn>
-            <CommonTableColumn>
-            <Link to={`/post/view/${u._id}`}>{u.subject}</Link>
-            </CommonTableColumn>
-            <CommonTableColumn>{u.username}</CommonTableColumn>
-            <CommonTableColumn>{u.date}</CommonTableColumn>
-          </CommonTableRow>
-        )) : "포스트가 존재하지 않습니다. 포스트를 작성해보세요."
-      }
-    </CommonTable>
-    <Link to='/post/write'><button className="post-btn">Go to Add Post</button></Link>
+    <div className="post-list-wrapper">
+      <CommonTable headersName={['Subject', 'Name']}>
+        {
+          posts ? posts.map((u, index) => (
+            <CommonTableRow key={index}>
+              <CommonTableColumn>
+              <Link to={`/post/view/${u._id}`}>{u.subject}</Link>
+              </CommonTableColumn>
+              <CommonTableColumn>{u.username}</CommonTableColumn>
+            </CommonTableRow>
+          )) : "포스트가 존재하지 않습니다. 포스트를 작성해보세요."
+        }
+      </CommonTable>
+    <Link to='/post/write'><button className="post-small-btn">write</button></Link>
+    </div>
     </div>
   )
 }

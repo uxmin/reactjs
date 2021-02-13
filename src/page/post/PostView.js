@@ -20,14 +20,20 @@ const PostView = ({history, location, match}) => {
     }
   }
   const deletePost = async() => {
-    const res = await fetch(`http://localhost:3001/post/delete/${_id}`);
-    try {
-      if(res != null){
-        alert('Delete Success');
-        return history.replace('/');
+    const msg = window.confirm('Are you sure you want to delete?');
+    if(msg == true){
+      const res = await fetch(`http://localhost:3001/post/delete/${_id}`);
+      try {
+        if(res != null){
+          alert('It has ben deleted successfully.');
+          return history.replace('/');
+        }
+      }catch(err) {
+        console.error(err);
       }
-    }catch(err) {
-      console.error(err);
+    }else if(msg == false){
+      console.log('Canceled.');
+      return;
     }
   }
   
@@ -38,35 +44,27 @@ const PostView = ({history, location, match}) => {
       {
         post ? (
           <div>
-            <div className="post-view-row">
-              <label>Id</label>
-              <label>{post._id}</label>
+            <div className="post-view-title">
+              <label>
+                {post.subject}&nbsp;&nbsp;
+                <span>{post.username} | {post.date}</span>
+              </label>
+              <div>
+                <button className="post-small-btn" onClick={() => history.goBack()}>list</button>
+                <Link to={`/post/edit/${post._id}`}>
+                <button className="post-small-btn">Edit</button>
+                </Link>
+                <button className="post-small-btn" onClick={deletePost}>Delete</button>
+              </div>
             </div>
-            <div className="post-view-row">
-              <label>Name</label>
-              <label>{post.username}</label>
+            <hr className="line"></hr>
+            <div className="post-view-content">
+              <label><pre>{post.content}</pre></label>
             </div>
-            <div className="post-view-row">
-              <label>Date</label>
-              <label>{post.date}</label>
-            </div>
-            <div className="post-view-row">
-              <label>Subject</label>
-              <label>{post.subject}</label>
-            </div>
-            <div className="post-view-row">
-              <label>Content</label>
-              <label>{post.content}</label>
-            </div>
-            <button className="post-view-btn" onClick={deletePost}>Delete</button>  
-            <Link to={`/post/edit/${post._id}`}>
-              <button className="post-view-btn">Edit</button>
-            </Link>
           </div>
         ) : '해당 게시글을 찾을 수 없습니다.'
       }
       </div>
-      <button className="post-btn" onClick={() => history.goBack()}>Back to the List</button>
     </div>
   )
 };
