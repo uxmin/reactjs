@@ -3,16 +3,15 @@ const { Schema } = mongoose;
 
 const postSchema = new Schema({
   username: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   subject: {
     type: String,
-    required: true
   },
   content: {
     type: String,
-    required: true
   },
   date: {
     type: Date,

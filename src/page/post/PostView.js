@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Post.css';
+import '../../css/Post.css';
 
 const PostView = ({history, location, match}) => {
   const [post, setPost] = useState({});
@@ -20,19 +20,18 @@ const PostView = ({history, location, match}) => {
     }
   }
   const deletePost = async() => {
-    const msg = window.confirm('Are you sure you want to delete?');
-    if(msg == true){
+    const msg = window.confirm('게시글을 삭제하시겠어요?');
+    if(msg === true){
       const res = await fetch(`http://localhost:3001/post/delete/${_id}`);
       try {
-        if(res != null){
-          alert('It has ben deleted successfully.');
-          return history.replace('/');
+        if(res !== null){
+          alert('게시글이 성공적으로 삭제되었습니다.');
+          return history.replace('/api/post');
         }
       }catch(err) {
         console.error(err);
       }
-    }else if(msg == false){
-      console.log('Canceled.');
+    }else if(msg === false){
       return;
     }
   }
@@ -51,8 +50,8 @@ const PostView = ({history, location, match}) => {
               </label>
               <div>
                 <button className="post-small-btn" onClick={() => history.goBack()}>list</button>
-                <Link to={`/post/edit/${post._id}`}>
-                <button className="post-small-btn">Edit</button>
+                <Link to={`/api/post/edit/${post._id}`}>
+                 <button className="post-small-btn">Edit</button>
                 </Link>
                 <button className="post-small-btn" onClick={deletePost}>Delete</button>
               </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Post.css';
+import '../../css/Post.css';
 
 const PostEdit = ({history, location, match}) => {
   const [post, setPost] = useState({});
@@ -34,24 +34,23 @@ const PostEdit = ({history, location, match}) => {
     };
     console.log(req);
     fetch('http://localhost:3001/post/edit', req)
-      .then(history.replace('/'));
+      .then(history.replace('/api/post'));
   }
 
   const backToThePost = () => {
-    const msg = window.confirm('Would you like to go back to the list?');
-    if(msg == true){
+    const msg = window.confirm('게시글을 수정하지 않고 돌아가시겠어요?');
+    if(msg === true){
       history.goBack();
-    }else if(msg == false){
+    }else if(msg === false){
       return;
     }
   }
   const checkEdit = () => {
-    const msg = window.confirm('Would you like to modify it?');
-    if(msg == true){
-      alert('It has been successfully fixed.');
+    const msg = window.confirm('게시글을 수정하시겠어요?');
+    if(msg === true){
+      alert('게시글이 성공적으로 수정되었습니다.');
       handleSubmit();
-    }else if(msg == false){
-      alert('Canceled.');
+    }else if(msg === false){
       return;
     }
   }

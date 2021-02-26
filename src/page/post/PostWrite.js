@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import './Post.css';
+import '../../css/Post.css';
 
 const PostWrite = props => {
   const [post, setPost] = useState({
@@ -22,7 +22,7 @@ const PostWrite = props => {
     };
     console.log(req);
     fetch('http://localhost:3001/post/write', req)
-      .then(history.replace('/'));
+      .then(history.replace('/api/post'));
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -30,20 +30,19 @@ const PostWrite = props => {
   };
 
   const checkAddition = async() => {
-    const msg = window.confirm('Would you like to add a post?');
-    if(msg == true){
-      alert('It has been added successfully!');
+    const msg = window.confirm('게시글을 작성하시겠어요?');
+    if(msg === true){
+      alert('게시글이 성공적으로 작성되었습니다.');
       handleSubmit();
-    }else if(msg == false){
-      alert('Canceled.');
+    }else if(msg === false){
       return;
     }
   }
   const backToTheList = () => {
-    const msg = window.confirm('Would you like to go back to the list?');
-    if(msg == true){
+    const msg = window.confirm('게시글을 작성하지 않고 돌아가시겠어요?');
+    if(msg === true){
       history.goBack();
-    }else if(msg == false){
+    }else if(msg === false){
       return;
     }
   }
