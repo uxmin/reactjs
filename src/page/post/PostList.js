@@ -8,6 +8,9 @@ import CommonTableColumn from '../../component/table/CommonTableColumn';
 import '../../css/Post.css';
 
 const PostList = props => {
+  const [user, setUser] = useState(
+    () => JSON.parse(window.localStorage.getItem('login'))
+  );
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -18,12 +21,15 @@ const PostList = props => {
     const res = await fetch('http://localhost:3001/post');
     const data = await res.json();
     setPosts(data);
-    console.log(posts);
+    // console.log(posts);
   };
 
   return (
     <div>
     <h2 align="center">List</h2>
+    {
+      user ? <h5 align="center">{user.id}님, 안녕하세요. :-)</h5> : <h5>Guest님, 안녕하세요. :-)</h5>
+    }
     <div className="post-list-wrapper">
       <CommonTable headersName={['Subject', 'Name']}>
         {

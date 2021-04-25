@@ -52,6 +52,7 @@ const userSchema = new Schema({
   }
 });
 
+// 비밀번호 암호화
 userSchema.pre('save', function (next) {
   let user = this;
   if(user.isModified('password')){

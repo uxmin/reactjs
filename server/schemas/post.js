@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const postSchema = new Schema({
   username: {
-    type: Schema.Types.ObjectId,
+    // type: Schema.Types.ObjectId,
+    type: String,
     ref: 'User',
     required: true
   },

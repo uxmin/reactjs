@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../../css/Post.css';
 
 const PostWrite = props => {
+  const [user, setUser] = useState(
+    () => JSON.parse(window.localStorage.getItem('login'))
+  );
   const [post, setPost] = useState({
     username: "",
     subject: "",
@@ -10,6 +13,13 @@ const PostWrite = props => {
   });
 
   let history = useHistory();
+
+  useEffect(() => {
+    // console.log(user);
+    if(user !== null){
+      post.username = user.id;
+    }
+  });
 
   const handleSubmit = (event) => {
     if(event){
@@ -20,13 +30,13 @@ const PostWrite = props => {
       headers: { 'Content-Type':'application/json' },
       body: JSON.stringify(post)
     };
-    console.log(req);
     fetch('http://localhost:3001/post/write', req)
       .then(history.replace('/api/post'));
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setPost({ ...post, [name]: value });
+    console.log(post);
   };
 
   const checkAddition = async() => {
@@ -52,12 +62,21 @@ const PostWrite = props => {
       <h2>Write</h2>
       <div className="post-write-wrapper">
         <form onSubmit={handleSubmit}>
-          <div className="post-write-row">
-            <label>Name</label>
-            <div>
-              <input className="post-write-input" type="text" name="username" onChange={handleChange} required />
+          { user !== null? 
+            <div className="post-write-row">
+              <label>Name</label>
+              <div>
+                <input className="post-write-input" type="text" name="username" onChange={handleChange} value={user.id} readOnly />
+              </div>
             </div>
-          </div>
+            :
+            <div className="post-write-row">
+              <label>Name</label>
+              <div>
+                <input className="post-write-input" type="text" name="username" onChange={handleChange} required />
+              </div>
+            </div>
+          }
           <div className="post-write-row">
             <label>Subject</label>
             <div>

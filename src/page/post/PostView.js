@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import '../../css/Post.css';
 
-const PostView = ({history, location, match}) => {
+const PostView = props => {
   const [post, setPost] = useState({});
-  const {_id} = match.params;
+  const [user, setUser] = useState(
+    () => JSON.parse(window.localStorage.getItem('login'))
+  );
+  const {_id} = props.match.params;
+  const chgDate = moment(post.date).format('YYYY-MM-DD');
 
   useEffect(() => {
     loadPost();
@@ -22,14 +27,20 @@ const PostView = ({history, location, match}) => {
   const deletePost = async() => {
     const msg = window.confirm('게시글을 삭제하시겠어요?');
     if(msg === true){
-      const res = await fetch(`http://localhost:3001/post/delete/${_id}`);
-      try {
-        if(res !== null){
-          alert('게시글이 성공적으로 삭제되었습니다.');
-          return history.replace('/api/post');
+      // 세션정보와 아이디 일치하는지 여부
+      if(user.id === post.username){
+        const res = await fetch(`http://localhost:3001/post/delete/${_id}`);
+        try {
+          if(res !== null){
+            alert('게시글이 성공적으로 삭제되었습니다.');
+            return props.history.replace('/api/post');
+          }
+        }catch(err) {
+          console.error(err);
         }
-      }catch(err) {
-        console.error(err);
+      }else{
+        alert('삭제를 할 권한이 없어요. 해당 아이디로 로그인 후 삭제해주세요.');
+        return;
       }
     }else if(msg === false){
       return;
@@ -46,10 +57,10 @@ const PostView = ({history, location, match}) => {
             <div className="post-view-title">
               <label>
                 {post.subject}&nbsp;&nbsp;
-                <span>{post.username} | {post.date}</span>
+                <span>{post.username} | {chgDate}</span>
               </label>
               <div>
-                <button className="post-small-btn" onClick={() => history.goBack()}>list</button>
+                <button className="post-small-btn" onClick={() => props.history.goBack()}>list</button>
                 <Link to={`/api/post/edit/${post._id}`}>
                  <button className="post-small-btn">Edit</button>
                 </Link>
