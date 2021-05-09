@@ -3,25 +3,35 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 const Home = props => {
-  // 로그인 정보가 있으면 세팅해주기
   const [user, setUser] = useState(
     () => JSON.parse(window.localStorage.getItem('login'))
   );
+  /*
+  const [userExpress, setUserExpress] = useState({
+    id : ''
+  });
+  */
   const [login, setLogin] = useState({
-    id: '',
-    password: ''
+    id : '',
+    password : ''
   });
   
-  // 히스토리 사용
   let history = useHistory();
 
-  // localStorage 확인
   useEffect(() => {
     console.log('login:', login);
     console.log('user:', user);
   }, [user]);
+  /*
+  useEffect(() => {
+    console.log('login:', login);
+    console.log('userExpress:', userExpress);
+  }, [userExpress]);
+  */
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // 로그인
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const loginSubmit = (event) => {
     if(event){
       event.preventDefault();
@@ -33,22 +43,38 @@ const Home = props => {
     };
     fetch('http://localhost:3001/user/login', req)
       .then(res => res.json())
+      .then(result => console.log(result))
       .then(result => result !== null ? setSession() : alert('회원정보를 찾을 수 없어요. 다시 입력해주세요.'))
-      .catch(err => console.error(err));
+      // .then(data => data !== null ? setSessionExpress(data) : alert('회원정보를 찾을 수 없어요. 다시 입력해주세요.'))
+      .catch(err => {
+        console.error(err);
+      });
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setLogin({ ...login, [name]: value });
   };
 
-  // 로그인 성공하면 세션 저장
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // 로그인 성공하면 세션 저장 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const setSession = () => {
     window.localStorage.setItem('login', JSON.stringify(login));
-    alert('성공적으로 로그인 되었어요. :-)');
+    alert('[React] 성공적으로 로그인 되었어요. :-)');
     history.replace('/api/post');
   };
+ /*
+  const setSessionExpress = (data) => {
+    console.log('Express 세션:', data.id);
+    setUserExpress({ id : data.id });
+    alert('[Express] 성공적으로 로그인 되었어요. :-)');
+    history.replace('/api/post');
+  }
+  */
 
-  // 로그아웃 시 세션 삭제
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // 로그아웃 시 세션 삭제 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const logoutSubmit = (event) => {
     if(event){
       event.preventDefault();
@@ -58,6 +84,9 @@ const Home = props => {
     setUser(null);
   };
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // input Enter 컨트롤
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const onKeyDown = (event) => {
     if(event.key === 'Enter'){
       event.preventDefault();

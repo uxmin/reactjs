@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const bcrypt = require('bcrypt');
 const saltRounds = 10; // 암호화 할 자릿수
 
 const userSchema = new Schema({
@@ -22,6 +21,16 @@ const userSchema = new Schema({
   username: {
     type: String,
     trim: true
+  },
+  keyBuf: {
+    type: Buffer,
+    trim: true,
+    default: null
+  },
+  ivBuf: {
+    type: [Number],
+    trim: true,
+    default: null
   },
   phone: {
     type: Number,
@@ -49,23 +58,6 @@ const userSchema = new Schema({
     type: Number,
     enum: [0, 1],
     default: 1
-  }
-});
-
-// 비밀번호 암호화
-userSchema.pre('save', function (next) {
-  let user = this;
-  if(user.isModified('password')){
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      if(err) return next(err);
-      bcrypt.hash(user.password, salt, (err, hash) => {
-        if(err) return next(err);
-        user.password = hash;
-        next();
-      });
-    });
-  }else{
-    next();
   }
 });
 
