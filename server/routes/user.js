@@ -5,7 +5,6 @@ const router = express.Router();
 
 // 내가 만든 모듈
 const User = require('../schemas/user');
-const login = require('../modules/login');
 // 공통 객체 선언
 const algorithm = 'aes-192-cbc';      // 암호화방식 - ? - Mode (AES 암호화 방식은 Default Mode가 cbc)
 const keyword = 'I am password';
@@ -54,21 +53,25 @@ router.post('/join', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
   try{
     const selectUser = await User.findOne({ id: req.body.id });
-    console.log('유저정보:\n', typeof(selectUser), '\n', selectUser);
-    const password = selectUser.password;
-    const key = selectUser.keyBuf;
-    const iv = new Uint8Array(selectUser.ivBuf);
+    if (selectUser != null) {
+      console.log('유저정보:\n', typeof(selectUser), '\n', selectUser);
+      const password = selectUser.password;
+      const key = selectUser.keyBuf;
+      const iv = new Uint8Array(selectUser.ivBuf);
 
-    const decipher = createDecipheriv(algorithm, key, iv);
-    let decrypted = decipher.update(password, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    // console.log('복호화된 비밀번호:\n', decrypted);
+      const decipher = createDecipheriv(algorithm, key, iv);
+      let decrypted = decipher.update(password, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+      console.log('복호화된 비밀번호:\n', decrypted);
 
-    if(req.body.password == decrypted){
-      console.log('비밀번호 일치');
-      res.json(selectUser.id);
+      if(req.body.password == decrypted){
+        console.log('비밀번호 일치');
+        res.status(200).json(selectUser.id);
+      }else{
+        res.status(404).json({error:'앗, 비밀번호가 다른데요? 비밀번호를 다시 입력해주세요. :)'});
+      }
     }else{
-      res.status(500);
+      res.status(404).json({error:'이런... 회원정보를 찾을 수 없어요! :('});
     }
   }catch(err){
     console.error(err);

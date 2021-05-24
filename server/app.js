@@ -6,21 +6,27 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const path = require('path');
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 환경변수 설정
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-switch(process.env.NODE_ENV){
-  case 'test':
-    dotenv.config(path.join(__dirname, '../env/test.env'));
-    console.log('테스트모드'); break;
-  case 'development':
-    dotenv.config(path.join(__dirname, '../env/dev.env'));
-    console.log('개발모드'); break;
-  case 'production':
-    dotenv.config(path.join(__dirname, '../env/prod.env'));
-    console.log('배포모드'); break;
-  default: console.log('모드가 설정되지 않았어요');
+// switch(process.env.NODE_ENV){
+//   case 'test':
+//     dotenv.config(path.join(__dirname, '../env/test.env'));
+//     console.log('테스트모드'); break;
+//   case 'development':
+//     dotenv.config(path.join(__dirname, '../env/dev.env'));
+//     console.log('개발모드'); break;
+//   case 'production':
+//     dotenv.config(path.join(__dirname, '../env/prod.env'));
+//     console.log('배포모드'); break;
+//   default: console.log('모드가 설정되지 않았어요');
+// }
+const envrs = dotenv.config({path:'C://development/javascript/reactjs/server/env/dev.env'});
+if (envrs.error) {
+  throw envrs.error
 }
+console.log(envrs.parsed);
 
 const app = express();
 const indexRouter = require('./routes/index');
@@ -34,7 +40,7 @@ connect();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const MongoDBStore = require('connect-mongodb-session')(session);
 const store = new MongoDBStore({
-  uri: 'mongodb://localhost:27017/connect_mongodb_session_test',
+  url: 'mongodb://localhost:27017/connect_mongodb_session_test',
   collection: 'mySessions'
 });
 store.on('error', (err, next) => {
@@ -89,7 +95,6 @@ app.use((err, req, res, next) => {
 app.use(indexRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 서버

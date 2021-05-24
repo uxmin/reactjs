@@ -19,6 +19,7 @@ const Home = props => {
   let history = useHistory();
 
   useEffect(() => {
+    console.clear();
     console.log('login:', login);
     console.log('user:', user);
   }, [user]);
@@ -43,8 +44,9 @@ const Home = props => {
     };
     fetch('http://localhost:3001/user/login', req)
       .then(res => res.json())
-      .then(result => console.log(result))
-      .then(result => result !== null ? setSession() : alert('회원정보를 찾을 수 없어요. 다시 입력해주세요.'))
+      .then(result => {
+        result.error !== undefined ? alert(result.error) : setSession()
+      })
       // .then(data => data !== null ? setSessionExpress(data) : alert('회원정보를 찾을 수 없어요. 다시 입력해주세요.'))
       .catch(err => {
         console.error(err);
