@@ -66,6 +66,7 @@ router.post('/login', async (req, res, next) => {
 
       if(req.body.password == decrypted){
         console.log('비밀번호 일치');
+        res.cookie.id = selectUser.id;
         res.status(200).json(selectUser.id);
       }else{
         res.status(404).json({error:'앗, 비밀번호가 다른데요? 비밀번호를 다시 입력해주세요. :)'});
